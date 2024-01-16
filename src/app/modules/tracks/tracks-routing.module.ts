@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path:'',
     component:TracksPageComponent,
-    outlet:'tracks-page'
+    outlet:'tracks-display'
   }
 ];
 

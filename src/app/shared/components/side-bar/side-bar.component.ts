@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TrackService } from '@modules/tracks/services/track.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -12,7 +14,7 @@ export class SideBarComponent implements OnInit {
   } = { defaultOptions :[], accessLink : []};
 
   customOptions:Array<any> = [];
-  constructor() { }
+  constructor(private router:Router, private trackService:TrackService) { }
 
   ngOnInit(): void {
     this.mainMenu.defaultOptions = [
@@ -29,8 +31,7 @@ export class SideBarComponent implements OnInit {
       {
         name: 'Tu biblioteca',
         icon: 'uil uil-chart',
-        router: ['/', 'favorites'],
-        query: { hola: 'mundo' }
+        router: ['/', 'favorites']
       }
     ]
 
@@ -63,7 +64,16 @@ export class SideBarComponent implements OnInit {
         router: ['/']
       }
     ]
-
+  }
+  goTo($event: any): void {
+    this.router.navigate(['/', 'favorites'], {
+      queryParams: {
+        key1: 'value1',
+        key2: 'value2',
+        key3: 'value3'
+      }
+    })
+    console.log($event)
   }
 
 }

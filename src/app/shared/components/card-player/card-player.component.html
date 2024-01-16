@@ -1,6 +1,6 @@
 <!-- Diseño del mode (small)-->
 <div *ngIf="mode==='small'" class="card-player player-small">
-    <img [src]="track.cover" [alt]="track.name" class="cover">
+    <img appImgBroken customImg="https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-512.png" [src]="track.cover" [alt]="track.name" class="cover">
     <div class="content-player">
         {{track.name}}
     </div>
@@ -17,14 +17,14 @@
 <!-- Diseño del mode (big)-->
 <div *ngIf="mode==='big'" class="card-player player-big">
 
-    <img [src]="track.cover" alt="" class="cover">
+    <img appImgBroken customImg="https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-512.png" [src]="track.cover" alt="" class="cover">
 
     <div class="content-player">
         <div class="title-track">{{track.name}}</div>
         <div class="sub-title-track">{{track.name}}</div>
     </div>
     <div class="buttons-player">
-        <button  *ngIf="true" class="play-btn">
+        <button (click)="sendPlay(track)" *ngIf="true" class="play-btn">
             <i class="uil " [ngClass]="{'uil-play':true}"></i>
         </button>
         <button *ngIf="false" class="play-btn">
