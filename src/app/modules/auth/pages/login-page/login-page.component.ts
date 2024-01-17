@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@modules/auth/services/auth.service';
-import { empty } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login-page',
@@ -11,9 +11,9 @@ import { empty } from 'rxjs';
 export class LoginPageComponent implements OnInit {
   
   formLogin : FormGroup = new FormGroup({});
+  errorSession:boolean = false;
 
-
-  constructor( private authService:AuthService) { }
+  constructor( private authService:AuthService, private cookie:CookieService) { }
 
   ngOnInit(): void {
     this.formLogin  = new FormGroup({
@@ -23,13 +23,17 @@ export class LoginPageComponent implements OnInit {
       ]),
       password: new FormControl('',[
         Validators.required,
-        Validators.min(6),
-        Validators.max(12)
+        Validators.minLength(6),
+        Validators.maxLength(12),
       ])
     })
   }
   sendLogin():void{
     const {email,password} = this.formLogin.value
-    this.authService.sendCredentials(email,password)
+    this.authService.sendCredentials(email,password).subscribe(responseOk =>{
+      console.log('Sesion iniciada correctamente');
+    },err =>{
+      console.log('Occurrio un error al iniciar sesión💨💨',err);
+    })
   }
 }

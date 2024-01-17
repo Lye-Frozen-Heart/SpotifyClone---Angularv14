@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TrackService } from '@modules/tracks/services/track.service';
+
 
 @Component({
   selector: 'app-side-bar',
@@ -14,7 +14,7 @@ export class SideBarComponent implements OnInit {
   } = { defaultOptions :[], accessLink : []};
 
   customOptions:Array<any> = [];
-  constructor(private router:Router, private trackService:TrackService) { }
+  constructor(private router:Router) { }
 
   ngOnInit(): void {
     this.mainMenu.defaultOptions = [
