@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '@modules/auth/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -9,11 +10,12 @@ import { CookieService } from 'ngx-cookie-service';
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements OnInit {
-  
-  formLogin : FormGroup = new FormGroup({});
   errorSession:boolean = false;
+  validSession:boolean = false;
+  formLogin : FormGroup = new FormGroup({});
+  
 
-  constructor( private authService:AuthService, private cookie:CookieService) { }
+  constructor( private authService:AuthService, private router:Router) { }
 
   ngOnInit(): void {
     this.formLogin  = new FormGroup({
@@ -31,8 +33,12 @@ export class LoginPageComponent implements OnInit {
   sendLogin():void{
     const {email,password} = this.formLogin.value
     this.authService.sendCredentials(email,password).subscribe(responseOk =>{
+      this.validSession = true;
       console.log('Sesion iniciada correctamente');
+      this.router.navigate(['/','tracks']);
+      
     },err =>{
+      this.errorSession = true;
       console.log('Occurrio un error al iniciar sesión💨💨',err);
     })
   }

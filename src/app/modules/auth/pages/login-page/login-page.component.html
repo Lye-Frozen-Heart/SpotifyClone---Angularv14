@@ -19,11 +19,11 @@
             <div class="form-steps">
                 <a class="link" href="">¿Se te ha olvidado la contraseña?</a>
             </div>
-            <div >
-                Ha habido un error con tu email o password
+            <div *ngIf="errorSession" style="color:red">
+                Ocurrió un error al introducir el email o el password
             </div>
-            <div *ngIf="errorSession">
-                Ocurrio un error con tu email o password
+            <div *ngIf="validSession" style="color:green">
+                Sesión iniciada correctamente
             </div>
             <div  class="form-action">
                 <button [disabled]="formLogin.invalid"  class="login social-btn">Iniciar sesión</button>
