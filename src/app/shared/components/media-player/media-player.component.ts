@@ -1,4 +1,4 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit,OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
 import { MultimediaService } from '@shared/services/multimedia.service';
 import { Subscription } from 'rxjs';
@@ -9,31 +9,30 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./media-player.component.css']
 })
 export class MediaPlayerComponent implements OnInit, OnDestroy {
-  mockCover:TrackModel = {
-    cover: 'https://media.istockphoto.com/id/1146670231/es/vector/ilustraci%C3%B3n-de-vector-de-pato-de-caucho.jpg?s=612x612&w=0&k=20&c=_ynfF5ICyMwRq-piQu3oj8i5yOBsf_zmrMXmQo6TfU8=',
-    album: 'Gioli & Assia',
-    name: 'BEBE (Oficial)',
-    duration: 0,
-    url: 'http://localhost/track.mp3',
-    _id: 1
-  }
+  @ViewChild('progressBar') progressBar:ElementRef = new ElementRef('');
   listObservers$:Array<Subscription> = [];
-  constructor(private multimedia:MultimediaService) {
+  state:string = 'paused';
+  constructor(public multimedia:MultimediaService) {
       
    }
    
   ngOnInit(): void {
-    const observer:Subscription = this.multimedia.callback.subscribe(
-        (response:TrackModel) => {
-          console.log('Recibiendo canción',response);
-        }
-      )
-      this.listObservers$ = [observer];
+      const observerPlayerStatus$ = this.multimedia.playerStatus$.subscribe(status => this.state = status);
+
+      this.listObservers$ = [observerPlayerStatus$];
   }
   ngOnDestroy(): void {
     this.listObservers$.forEach(u=>u.unsubscribe())
     console.log('🛑🛑🛑🛑🛑BOOM!');
     
+  }
+  handlePosition(event:MouseEvent):void{
+    const elNative :HTMLElement = this.progressBar.nativeElement;
+    const {clientX } = event; //Donde hace click el usuario en el eje X
+    const {x,width} = elNative.getBoundingClientRect(); //x aquí es la suma del primer elemento con el segundo que es progress bar, width la medida máxima del elemento de progreso
+    const clickX = clientX - x;  //Relación de clientX del usuario menos el valor incial del elemento
+    const percentageFromX = (clickX  * 100) /width; //Porcentaje en relación del click de la barra!
+    this.multimedia.seekAudio(percentageFromX);
   }
   
 

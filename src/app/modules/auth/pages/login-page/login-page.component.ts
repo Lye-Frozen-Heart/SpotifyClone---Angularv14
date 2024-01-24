@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '@modules/auth/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -15,7 +16,9 @@ export class LoginPageComponent implements OnInit {
   formLogin : FormGroup = new FormGroup({});
   
 
-  constructor( private authService:AuthService, private router:Router) { }
+  constructor( private authService:AuthService, private router:Router, private titleService:Title) { 
+    this.titleService.setTitle("Login Page");
+  }
 
   ngOnInit(): void {
     this.formLogin  = new FormGroup({

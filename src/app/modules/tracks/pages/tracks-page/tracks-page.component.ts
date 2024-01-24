@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '@modules/tracks/services/track.service';
 import { Subscription, lastValueFrom } from 'rxjs';
@@ -11,7 +12,9 @@ export class TracksPageComponent implements OnInit {
   tracksTrending:Array<TrackModel> = [];
   tracksRandom:Array<TrackModel> = [];
   listObservers$:Array<Subscription> = [];
-  constructor(private trackService:TrackService) { }
+  constructor(private trackService:TrackService,private titleService:Title) { 
+    this.titleService.setTitle("Tracks")
+  }
 
   ngOnInit(): void {
    this.loadDataAll();
