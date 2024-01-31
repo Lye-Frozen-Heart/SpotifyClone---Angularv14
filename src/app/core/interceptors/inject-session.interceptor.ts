@@ -12,12 +12,11 @@ import { CookieService } from 'ngx-cookie-service';
 export class InjectSessionInterceptor implements HttpInterceptor {
 
   constructor(private cookie:CookieService) {}
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    try{
-      let newRequest = request;
+  
+  private setAndReturnBearerToken = (request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>>=> {
+    
       const token = this.cookie.get('token_service');
-      newRequest = request.clone(
+      let newRequest = request.clone(
         {
         setHeaders : {
           authorization:`Bearer ${token}`
@@ -25,6 +24,11 @@ export class InjectSessionInterceptor implements HttpInterceptor {
        }
       );
       return next.handle(newRequest);
+  }
+
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    try{
+      return this.setAndReturnBearerToken(request,next);
     }catch(e){
       console.log("Interceptation error: ", e);
       return next.handle(request);

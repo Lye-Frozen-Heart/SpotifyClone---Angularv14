@@ -15,16 +15,15 @@ export class TrackService {
     
   }
   private skipById(listTracks:TrackModel[],id:number):Promise<TrackModel[]>{
-    return new Promise((resolve,reject) =>{
+    return new Promise((resolve) =>{
       const listTmp = listTracks.filter(a => a._id !== id)
       resolve(listTmp);
     })
   }
   /**
-   * 
-   * @returns {Array:TrackModel} Devolver todas las canciones
+   * @returns {Array:TrackModel} Mapear y devolver las canciones
    */
-  getAllTracks$():Observable<any> {
+  private returnMapedData = ():Observable<any> =>{
     return this.httpClient.get(`${this.URL}/tracks`)
     .pipe(map(({data}:any) =>{
       return data;
@@ -38,9 +37,16 @@ export class TrackService {
   }
   /**
    * 
+   * @returns {Array:TrackModel} Devolver todas las canciones
+   */
+  getAllTracks$():Observable<any> {
+    return this.returnMapedData();
+  }
+  /**
+   * 
    * @returns Devolver canciones random
    */
-  getAllRandom$():Observable<any> {
+  private returnMapedRandomData = ():Observable<any> => {
     return this.httpClient.get(`${this.URL}/tracks`)
     .pipe(mergeMap(({data}:any) =>this.skipById(data,2)),
       tap(data => console.log('🆗🆗🆗🆗🆗🆗',data)),
@@ -50,7 +56,10 @@ export class TrackService {
         return of([]);
       })
     );
-
+  }
+  
+  getAllRandom$():Observable<any> {
+    return this.returnMapedRandomData();
   }
 
 

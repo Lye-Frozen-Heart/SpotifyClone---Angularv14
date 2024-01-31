@@ -16,14 +16,16 @@ export class SessionGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.checkCookieSession();
   }
+
+  tokenChecker = ():boolean =>{
+    const token:boolean = this.cookieService.check('token_service');
+    if(!token) this.router.navigate(['/','auth']);
+    return token;
+  }
   
   checkCookieSession():boolean{
     try{
-      const token:boolean = this.cookieService.check('token_service');
-      if(!token) {
-        this.router.navigate(['/','auth']);
-      }
-      return token;
+      return this.tokenChecker();
     }catch(e){
       console.log('An error has ocurred: ', e);
       return false;
